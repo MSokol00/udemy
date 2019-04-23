@@ -39,7 +39,7 @@ def evaluate(p1, p2):
     if p1 == p2:
         return 0
     else:
-        for a,b,w in RULES:
+        for a, b, w in RULES:
             if a == p1 and b == p2:
                 return w
 
