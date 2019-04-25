@@ -46,4 +46,3 @@ def evaluate(p1, p2):
 
 if __name__ == '__main__':
     start()
-

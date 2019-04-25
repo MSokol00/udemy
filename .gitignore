@@ -1,8 +1,3 @@
-
-\.idea/misc\.xml
-
-\.idea/udemy\.iml
-
-\.idea/workspace\.xml
-
 venv/
+
+\.idea/
