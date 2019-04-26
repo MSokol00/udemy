@@ -5,7 +5,7 @@ from random import choice
 
 url = "https://icanhazdadjoke.com/search"
 f = Figlet()
-cprint(f.renderText('Dad Joke 2000'), color='red')
+cprint(f.renderText('Dad Joke 3000'), color='red')
 while True:
     topic = input('Let me tell You a joke! Give me a topic:')
     if len(topic):
