@@ -5,7 +5,7 @@ class Card:
     _VALUES = ('A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K')
     _SUITS = ('Hearts', 'Diamonds', 'Clubs', 'Spades')
 
-    def __init__(self, suit, value):
+    def __init__(self, suit: str, value: str) -> object:
         if suit not in Card._SUITS:
             raise ValueError(f'Suit "{suit}" not in available suits')
         if value not in Card._VALUES:
@@ -18,13 +18,13 @@ class Card:
 
 
 class Deck:
-    def __init__(self):
+    def __init__(self) -> None:
         self.cards = [Card(s, v) for s in Card._SUITS for v in Card._VALUES]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Deck of {self.count()} cards'
 
-    def _deal(self, num: int) -> object:
+    def _deal(self, num: int) -> list:
         if self.count() == 0:
             raise ValueError('All cards have been dealt')
         deal = []
@@ -32,19 +32,19 @@ class Deck:
             deal.append(self.cards.pop(0))
         return deal
 
-    def count(self):
+    def count(self) -> int:
         return len(self.cards)
 
-    def shuffle(self):
+    def shuffle(self) -> object:
         if len(self.cards) < 52:
             raise ValueError('Only full decks can be shuffled')
         shuffle(self.cards)
         return self
 
-    def deal_card(self):
+    def deal_card(self) -> object:
         return self._deal(1)[0]
 
-    def deal_hand(self, num):
+    def deal_hand(self, num: int) -> list:
         return self._deal(num)
 
 
