@@ -20,9 +20,13 @@ class Card:
 class Deck:
     def __init__(self) -> None:
         self.cards = [Card(s, v) for s in Card._SUITS for v in Card._VALUES]
+        self.iter_i = 1
 
     def __repr__(self) -> str:
         return f'Deck of {self.count()} cards'
+
+    def __iter__(self):
+        return iter(self.cards)
 
     def _deal(self, num: int) -> list:
         if self.count() == 0:
@@ -57,3 +61,6 @@ if __name__ == '__main__':
     print(deck.deal_hand(5))
     print(deck)
     print(deck.deal_hand(5))
+
+    for card in deck:
+        print(card)
