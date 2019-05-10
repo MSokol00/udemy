@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 from random import choice
 from termcolor import cprint
+from time import ctime
+from datetime import datetime
+import pickle
+import os
 
 
 class Quote:
@@ -26,13 +30,33 @@ class Game:
     url = 'http://quotes.toscrape.com'
 
     def __init__(self):
-        self.quotes = Game.scrape_quotes(Game.url)
         self.tries = 4
         self.random_quote = None
         self.about_author = {}
+        self.quotes = Game.get_quotes()
 
     @staticmethod
-    def scrape_quotes(url: str) -> list:
+    def get_quotes() -> list:
+        delta_days = 1
+        if os.path.exists('quotes.pickle'):
+            current_time = datetime.strptime(str(datetime.now()), "%Y-%m-%d %H:%M:%S.%f")
+            file_time = datetime.strptime(str(ctime(os.path.getmtime('quotes.pickle'))),
+                                                  "%a %b %d %H:%M:%S %Y")
+            delta_days = (current_time - file_time).days
+            if delta_days < 1:
+                return Game.load_quotes()
+        if delta_days > 0:
+            return Game.scrap_quotes(Game.url)
+
+    @staticmethod
+    def load_quotes() -> list:
+        if os.path.exists('quotes.pickle'):
+            with open('quotes.pickle', 'rb') as file:
+                quotes_list = pickle.load(file)
+            return quotes_list
+
+    @staticmethod
+    def scrap_quotes(url: str) -> list:
         quotes_list = []
         next_url = url
         cprint(f'{"="*20}Start of Scraping{"="*20}', color='grey', on_color='on_white')
@@ -47,12 +71,13 @@ class Game:
                 author = quote.find('small', attrs={'class': 'author'}).text
                 about_url = quote.find('a')['href']
                 quotes_list.append(Quote(author=author, quote=text, about_url=f'{Game.url}{about_url}'))
-            print('Scraping successful')
             if not soup.find('li', attrs={'class': 'next'}):
-                cprint(f'{"="*30}Rnd of scraping{"="*30}', color='grey', on_color='on_white')
+                cprint(f'{"="*30}End of scraping{"="*30}', color='grey', on_color='on_white')
                 break
             i += 1
             next_url = f'{url}/page/{i}/'
+        with open('quotes.pickle', 'wb') as file:
+            pickle.dump(quotes_list, file)
         return quotes_list
 
     def ask(self, quote: bool) -> bool:
