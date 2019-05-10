@@ -16,10 +16,11 @@ with open('posts.csv', 'w') as file:
 
     while True:
         response = requests.get(url)
-        if response.status_code == 404:
-            break
         content = response.text
+        print(f'Scraping posts data from: {url}...')
         soup = BeautifulSoup(content, 'html.parser')
+        if soup.find('p', attrs={'class': 'lead'}).text.strip() == 'No matches found':
+            break
         articles = soup.find_all("article")
         for article in articles:
             link = article.find("a")['href']
@@ -29,6 +30,6 @@ with open('posts.csv', 'w') as file:
                              'link': link,
                              'date': date
                              })
+        print(f'Scraped from {url} successful.')
         url = f'https://www.rithmschool.com/blog?page={i}'
-        print(url)
         i += 1
