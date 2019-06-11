@@ -15,7 +15,7 @@ def sum_pairs(numbers, i):
     for num in numbers:
         diff = i - num
         if diff in already_visited:
-            return [diff, i]
+            return [diff, num]
         already_visited.add(num)
     return []
 
